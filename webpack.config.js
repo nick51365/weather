@@ -14,14 +14,14 @@ module.exports = {
         use: ["style-loader", "css-loader"],
       },
       {
-        test: /\.(jpeg|jpg|png)$/,
-        use: {loader: 'url-loader',}, 
-      },
-      {
         test: /\.json$/i,
         type: 'javascript/auto',
         loader: 'json-loader',
-      }
+      },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: 'asset/resource',
+      },
     ],
   },
 };

@@ -3,7 +3,34 @@ import * as renderPage from "./renderPage.js";
 
 //API key
 let key = "2a7c2f8041b4067f7f76241f5798f915";
-let newWeatherObj = "notyet";
+let newWeatherObj = "";
+
+//Takes processed input and finds corresponding city object in .json file
+function findCityByName(input){
+    let errorMsg = document.getElementById("errorMsg")
+    if (input.length === 1){
+        const city = cityList.find(city => city.name.toLowerCase() == input);
+            if (city === undefined){
+                throwError();
+                return;
+            }else{
+                fetchData(city.id, city.state, city.country);
+                errorMsg.style.display = "none";
+            };
+            
+    }else{
+        const city = cityList.find(city => city.name.toLowerCase() == input[0] &&
+        city.state.toLowerCase() == input[1]);
+            if (city === undefined){
+                throwError();
+                return;
+            }else{
+                fetchData(city.id, city.state, city.country);
+                errorMsg.style.display = "none";
+            };
+
+    }
+};
 
 //Takes city object from .json and calls OpenWeatherMap API
 async function fetchData(cityID, cityState, cityCountry){
@@ -11,18 +38,6 @@ async function fetchData(cityID, cityState, cityCountry){
     let data = await response.json();
     newWeatherObj = createWeatherObj(data, cityState, cityCountry);
     renderPage.buildWeatherContainer();
-};
-
-//Takes processed input and finds corresponding city object in .json file
-function findCityByName(input){
-    if (input.length === 1){
-        const city = cityList.find(city => city.name.toLowerCase() == input);
-            fetchData(city.id, city.state, city.country);
-    }else{
-        const city = cityList.find(city => city.name.toLowerCase() == input[0] &&
-        city.state.toLowerCase() == input[1]);
-            fetchData(city.id, city.state, city.country);
-    }
 };
 
 //Create a new WeatherData object to hold desired data from API response
@@ -53,6 +68,18 @@ function WeatherData(cityName,cityState,cityCountry,desc,currentTemp,feelsLike,c
     this.humidity = humidity + "%";
     this.windSpeed = speedConvert(windSpeed).toFixed(2) + " MPH";
 
+};
+
+function throwError(){
+    let errorMsg = document.getElementById("errorMsg");
+    if (errorMsg.style.display === "block"){
+        errorMsg.style.display = "none";
+        setTimeout(()=>
+            errorMsg.style.display ="block"
+        ,10);
+    }else{
+        errorMsg.style.display = "block";
+    }
 };
 
 //Convert temps in Kelvin to Fahrenheit

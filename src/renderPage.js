@@ -1,4 +1,14 @@
 import {newWeatherObj} from "./callAPI";
+import Search from "./assets/images/search.png";
+import Background from "./assets/images/space.jpg";
+
+//Set background image
+function setBackground(){
+    let backgroundContainer = document.createElement("img");
+    backgroundContainer.id = "backgroundContainer";
+    document.body.append(backgroundContainer);
+    backgroundContainer.src = Background;
+}
 
 //Build search bar
 function buildSearchBar(){
@@ -9,6 +19,7 @@ function buildSearchBar(){
     //Build search bar input
     let searchBar = document.createElement("input");
     searchBar.id = "searchBar";
+    searchBar.placeholder = "Enter city...";
     inputForm.appendChild(searchBar);
 
     //Build search button
@@ -16,17 +27,30 @@ function buildSearchBar(){
     searchButton.id = "searchButton";
     searchButton.type = "submit";
     inputForm.append(searchButton);
-
     let buttonPic = document.createElement("img");
-    buttonPic.src = "./assets/images/search.png";
+    buttonPic.src = Search;
     buttonPic.id = "buttonPic";
     searchButton.append(buttonPic);
+
+    //Build error message
+    let errorMsg = document.createElement("div");
+    errorMsg.id = "errorMsg";
+    errorMsg.textContent = "City not found!";
+    inputForm.append(errorMsg);
 };
 
 //Build display for weather data
 function buildWeatherContainer(){
-    console.log(newWeatherObj);
-    let weatherContainer = document.getElementById("weatherContainer");
+
+    //Create weatherContainer if it doesn't already exist
+    if (document.getElementById("weatherContainer") === null){
+        let weatherContainer = document.createElement("div");
+        weatherContainer.id = "weatherContainer";
+        document.body.append(weatherContainer);
+    };
+
+
+    //Create divs within weatherContainer
     let nameContainer = document.createElement("div");
     let cityName = document.createElement("h1");
     let stateOrCountry = document.createElement("h1");
@@ -51,7 +75,7 @@ function buildWeatherContainer(){
     humidity.id = "humidity";
 
 
-    //Clear weather container
+    //Clear weather container before adding current data
     weatherContainer.innerHTML = "";
 
     //Populate nameContainer with city name and state/country
@@ -79,13 +103,11 @@ function buildWeatherContainer(){
         weatherLeft,
         weatherRight,
     );
-
     weatherLeft.append(
         descContainer,
         nameContainer,
         tempContainer,
     );
-
     weatherRight.append(
         feelsLike,
         windSpeed,
@@ -98,6 +120,7 @@ function buildWeatherContainer(){
 //All content rendering functions packaged into one function for export
 function renderContent(){
     buildSearchBar();
+    setBackground()
 }
 
 export{

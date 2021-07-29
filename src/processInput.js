@@ -18,7 +18,6 @@ function processInput(){
         }
     }
    
-    console.log(input);
     //Clear the search bar
     searchBar.value = "";
     return input;
